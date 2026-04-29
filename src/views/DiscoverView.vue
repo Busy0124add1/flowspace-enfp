@@ -91,7 +91,7 @@ const hotArticles = computed(() => {
 })
 
 function handleArticleClick(article) {
-  console.log('Article clicked:', article.title)
+  // Article click handler - future: navigate to detail
 }
 </script>
 
