@@ -51,16 +51,18 @@ function loadSpark() {
   startTypewriter(text)
 }
 
+let typewriterInterval = null
+
 function startTypewriter(text) {
   displayText.value = ''
   isTyping.value = true
   let i = 0
-  const interval = setInterval(() => {
+  typewriterInterval = setInterval(() => {
     if (i < text.length) {
       displayText.value += text[i]
       i++
     } else {
-      clearInterval(interval)
+      clearInterval(typewriterInterval)
       isTyping.value = false
     }
   }, 50)
@@ -68,6 +70,10 @@ function startTypewriter(text) {
 
 onMounted(() => {
   loadSpark()
+})
+
+onUnmounted(() => {
+  if (typewriterInterval) clearInterval(typewriterInterval)
 })
 </script>
 
