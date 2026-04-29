@@ -59,7 +59,7 @@ const streakCount = ref(7)
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 56px;
+  height: 52px;
   padding: 0 20px;
   background: var(--surf);
   border-bottom: 1px solid var(--line);
