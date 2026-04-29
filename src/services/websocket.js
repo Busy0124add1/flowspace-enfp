@@ -19,16 +19,20 @@ class WSService {
     }
 
     this.ws.onmessage = (e) => {
-      const data = JSON.parse(e.data)
-      this.emit(data.type, data.payload)
+      try {
+        const data = JSON.parse(e.data)
+        this.emit(data.type, data.payload)
+      } catch (err) {
+        this.emit('error', { message: 'Failed to parse message', raw: e.data })
+      }
     }
 
     this.ws.onclose = () => {
       this.reconnect()
     }
 
-    this.ws.onerror = () => {
-      // Error will trigger onclose, which handles reconnect
+    this.ws.onerror = (err) => {
+      this.emit('error', { message: 'WebSocket error', error: err })
     }
   }
 
