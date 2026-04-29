@@ -1,10 +1,22 @@
 <script setup>
-// FlowSpace ENFP - Vue Port
+import { onMounted } from 'vue'
+import { useAppStore } from '@/stores/app'
+
+const appStore = useAppStore()
+
+onMounted(() => {
+  // Apply CSS variables on mount
+  appStore.applyCssVars()
+})
 </script>
 
 <template>
   <div id="app">
     <h1>FlowSpace ENFP</h1>
+    <p>Current MBTI: <strong>{{ appStore.currentMbti }}</strong></p>
+    <p>Accent Color: <span :style="{ color: appStore.accentColor }">{{ appStore.accentColor }}</span></p>
+    <p>Description: {{ appStore.mbtiConfig.description }}</p>
+
     <!-- Style verification test - should show pink accent color -->
     <div class="style-test">
       <div class="test-bg">BG</div>
