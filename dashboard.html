@@ -6,6 +6,7 @@
 <title>FlowSpace · ENFP</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -13,6 +14,9 @@
   --t1:#eeeef2; --t2:#8a8b99; --t3:#4a4b58;
   --pink:#f0537a; --cyan:#3ecfcf; --lime:#9de84b; --violet:#9b6dff; --amber:#f5a623;
   --r:12px; --r2:18px;
+  --accent: #f0537a;
+  --article-cover-overlay: rgba(0,0,0,0.45);
+  --article-tag-bg: rgba(240,83,122,0.12);
 }
 html,body{height:100%;overflow:hidden;}
 body{font-family:"Outfit",system-ui,sans-serif;background:var(--bg);color:var(--t1);font-size:14px;line-height:1.5;}
@@ -54,7 +58,7 @@ body{font-family:"Outfit",system-ui,sans-serif;background:var(--bg);color:var(--
 .mbti-option[data-group="explorers"].selected{background:color-mix(in srgb,#f5a623 12%,transparent);}
 
 /* MAIN */
-.main{display:grid;grid-template-columns:1fr 360px;overflow:hidden;}
+.main{display:grid;grid-template-columns:1fr;overflow:hidden;}
 .left{padding:18px;overflow-y:auto;display:flex;flex-direction:column;gap:16px;}
 .right{padding:18px;overflow-y:auto;display:flex;flex-direction:column;gap:16px;border-left:1px solid var(--line);background:var(--surf);}
 .s-label{font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--t3);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
@@ -80,7 +84,9 @@ body{font-family:"Outfit",system-ui,sans-serif;background:var(--bg);color:var(--
 .journal-saved-bar{font-size:10px;color:var(--t3);margin-top:4px;height:14px;transition:opacity .3s;}
 
 /* ── THREADS ── */
-.threads-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;}
+.threads-bubble-zone{position:relative;overflow:hidden;border-radius:var(--r2);}
+.thread-bubble{position:absolute;border-radius:50%;pointer-events:none;opacity:.12;filter:blur(2px);transition:transform .8s cubic-bezier(.25,1,.5,1);z-index:0;}
+.threads-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;position:relative;z-index:1;}
 .thread{background:var(--card);border:1px solid var(--line);border-radius:var(--r2);padding:16px;cursor:default;transition:border-color .3s,box-shadow .3s;position:relative;overflow:hidden;}
 /* splat layer sits at very bottom */
 .thread-splat-layer{position:absolute;inset:0;pointer-events:none;z-index:0;border-radius:var(--r2);overflow:hidden;}
@@ -93,8 +99,8 @@ body{font-family:"Outfit",system-ui,sans-serif;background:var(--bg);color:var(--
 .thread-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;position:relative;z-index:3;}
 .thread-ico{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;}
 .thread-pct-big{font-size:28px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1;letter-spacing:-1px;}
-.thread-name{font-size:13px;font-weight:700;margin-bottom:2px;position:relative;z-index:3;}
-.thread-desc{font-size:11px;color:var(--t3);margin-bottom:12px;position:relative;z-index:3;}
+.thread-name{font-size:14px;font-weight:800;letter-spacing:-.2px;margin-bottom:2px;position:relative;z-index:3;}
+.thread-desc{font-size:11px;font-weight:500;color:var(--t2);margin-bottom:12px;position:relative;z-index:3;}
 .thread-bar-track{height:7px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.05);border-radius:99px;overflow:hidden;margin-bottom:12px;position:relative;z-index:3;}
 .thread-bar-fill{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.25,1,.5,1);}
 .thread-steps{display:flex;flex-direction:column;gap:5px;position:relative;z-index:3;}
@@ -144,9 +150,9 @@ body{font-family:"Outfit",system-ui,sans-serif;background:var(--bg);color:var(--
 .q-axis-label.right{right:6px;top:50%;transform:translateY(-50%) rotate(90deg);}
 /* tints */
 .q-tint{position:absolute;pointer-events:none;z-index:0;}
-.q-tint.ui{top:0;left:0;width:50%;height:50%;background:color-mix(in srgb,var(--pink) 5%,transparent);}
-.q-tint.si{top:0;right:0;width:50%;height:50%;background:color-mix(in srgb,var(--amber) 5%,transparent);}
-.q-tint.un{bottom:0;left:0;width:50%;height:50%;background:color-mix(in srgb,var(--cyan) 4%,transparent);}
+.q-tint.ui{top:0;left:0;width:50%;height:50%;background:radial-gradient(ellipse at 30% 30%,color-mix(in srgb,var(--pink) 8%,transparent),transparent 70%);}
+.q-tint.si{top:0;right:0;width:50%;height:50%;background:radial-gradient(ellipse at 70% 30%,color-mix(in srgb,var(--amber) 8%,transparent),transparent 70%);}
+.q-tint.un{bottom:0;left:0;width:50%;height:50%;background:radial-gradient(ellipse at 30% 70%,color-mix(in srgb,var(--cyan) 6%,transparent),transparent 70%);}
 /* corner labels */
 .q-corner{position:absolute;font-size:8px;font-weight:700;letter-spacing:.5px;pointer-events:none;z-index:2;opacity:.55;}
 .q-corner.ui{top:10px;left:10px;color:var(--pink);}
@@ -180,6 +186,13 @@ body{font-family:"Outfit",system-ui,sans-serif;background:var(--bg);color:var(--
 .todo-progress-bar{flex:1;height:4px;background:var(--line);border-radius:99px;overflow:hidden;margin:0 10px;}
 .todo-progress-fill{height:100%;background:linear-gradient(90deg,var(--violet),var(--pink));border-radius:99px;transition:width .5s cubic-bezier(.25,1,.5,1);}
 .todo-stat-text{font-size:11px;color:var(--t3);font-variant-numeric:tabular-nums;white-space:nowrap;}
+
+/* todo section collapse */
+.todo-collapse-btn{background:none;border:none;color:var(--t3);cursor:pointer;font-size:10px;padding:0;margin-left:auto;transition:color .15s,transform .2s;display:flex;align-items:center;}
+.todo-collapse-btn:hover{color:var(--t1);}
+.todo-collapse-btn.collapsed{transform:rotate(-90deg);}
+.todo-section-body{max-height:600px;overflow:hidden;transition:max-height .35s cubic-bezier(.25,1,.5,1);}
+.todo-section-body.collapsed{max-height:0;}
 
 /* ── SYNC ── */
 .sync-list{display:flex;flex-direction:column;gap:6px;}
@@ -216,7 +229,7 @@ body{font-family:"Outfit",system-ui,sans-serif;background:var(--bg);color:var(--
 .flash-del:hover{color:var(--pink);}
 
 /* ── DAILY SPARK ── */
-.daily-spark-wrap{background:linear-gradient(135deg,color-mix(in srgb,var(--pink) 8%,transparent),color-mix(in srgb,var(--violet) 8%,transparent));border:1px solid color-mix(in srgb,var(--pink) 20%,transparent);border-radius:var(--r2);padding:14px 18px;position:relative;overflow:hidden;}
+.daily-spark-wrap{background:linear-gradient(135deg,color-mix(in srgb,var(--pink) 8%,transparent),color-mix(in srgb,var(--violet) 8%,transparent));border:1px solid color-mix(in srgb,var(--pink) 20%,transparent);border-radius:var(--r2);padding:18px 28px;margin:0 -4px;position:relative;overflow:hidden;}
 .daily-spark-wrap::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--violet) 20%,transparent),transparent 70%);pointer-events:none;}
 .spark-eyebrow{font-size:9px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--pink);margin-bottom:6px;display:flex;align-items:center;gap:5px;}
 .spark-text{font-size:13px;font-weight:500;line-height:1.6;color:var(--t1);min-height:22px;}
@@ -276,6 +289,135 @@ body{font-family:"Outfit",system-ui,sans-serif;background:var(--bg);color:var(--
 .done-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .empty{text-align:center;padding:14px;color:var(--t3);font-size:12px;}
 .empty i{display:block;font-size:16px;margin-bottom:5px;opacity:.5;}
+
+/* ── PAGE NAV TABS ── */
+.page-tabs{display:flex;gap:4px;margin-right:16px;}
+.page-tab{padding:6px 14px;border-radius:99px;font-size:12px;font-weight:600;color:var(--t3);cursor:pointer;transition:all .2s;background:transparent;border:1px solid transparent;font-family:inherit;}
+.page-tab:hover{color:var(--t2);}
+.page-tab.active{color:var(--t1);background:var(--card);border-color:var(--line);}
+
+/* ── PAGE CONTAINERS ── */
+.page-container{display:none;overflow:hidden;}
+.page-container.active{display:grid;grid-template-columns:1fr 360px;grid-column:1/-1;}
+
+/* ── ARTICLE CARDS (SMALL - dashboard featured) ── */
+.featured-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
+.article-card-sm{background:var(--card);border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;cursor:pointer;transition:border-color .2s,transform .15s;}
+.article-card-sm:hover{border-color:var(--t3);transform:translateY(-2px);}
+.article-card-cover{height:100px;position:relative;overflow:hidden;}
+.article-card-cover-gradient{position:absolute;inset:0;}
+.article-card-cover-overlay{position:absolute;inset:0;background:var(--article-cover-overlay);display:flex;align-items:flex-end;padding:10px 12px;}
+.article-card-cover-tags{display:flex;gap:4px;}
+.article-card-cover-tag{font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--t1);background:var(--article-tag-bg);padding:2px 6px;border-radius:4px;}
+.article-card-body{padding:12px;}
+.article-card-title{font-size:13px;font-weight:700;line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.article-card-meta{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--t3);}
+.article-card-meta i{font-size:10px;}
+
+/* ── ARTICLE CARDS (LARGE - deep read) ── */
+.deep-read-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;cursor:pointer;transition:border-color .2s;}
+.deep-read-card:hover{border-color:var(--t3);}
+.deep-read-cover{height:180px;position:relative;overflow:hidden;}
+.deep-read-cover-gradient{position:absolute;inset:0;}
+.deep-read-cover-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,rgba(0,0,0,.2) 60%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px;}
+.deep-read-eyebrow{font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;display:flex;gap:8px;align-items:center;}
+.deep-read-eyebrow span{opacity:.5;}
+.deep-read-title{font-size:18px;font-weight:800;line-height:1.3;letter-spacing:-.3px;}
+.deep-read-body{padding:16px 20px;}
+.deep-read-excerpt{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.deep-read-footer{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--t3);}
+.deep-read-author{display:flex;align-items:center;gap:6px;}
+.deep-read-author-dot{width:20px;height:20px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#fff;}
+.deep-read-stats{display:flex;gap:12px;}
+.deep-read-stat{display:flex;align-items:center;gap:4px;}
+
+/* ── MBTI DISCOVER CARD ── */
+.mbti-discover{background:var(--card);border:1px solid var(--line);border-radius:var(--r2);padding:18px 20px;margin-bottom:6px;}
+.mbti-discover-top{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+.mbti-discover-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;letter-spacing:1px;flex-shrink:0;}
+.mbti-discover-info{flex:1;}
+.mbti-discover-type{font-size:16px;font-weight:800;letter-spacing:-.3px;}
+.mbti-discover-desc{font-size:12px;color:var(--t2);margin-top:2px;line-height:1.4;}
+.mbti-discover-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;}
+.mbti-discover-opt{padding:6px 2px;border-radius:8px;border:1px solid transparent;cursor:pointer;text-align:center;transition:all .15s;font-size:11px;font-weight:700;color:var(--t3);background:var(--surf);}
+.mbti-discover-opt:hover{color:var(--t1);border-color:var(--line);}
+.mbti-discover-opt.active{color:#fff;border-color:currentColor;}
+.mbti-discover-opt[data-group="analysts"]{color:#9b6dff;}.mbti-discover-opt[data-group="analysts"].active{background:#9b6dff33;}
+.mbti-discover-opt[data-group="diplomats"]{color:#3ecfcf;}.mbti-discover-opt[data-group="diplomats"].active{background:#3ecfcf33;}
+.mbti-discover-opt[data-group="sentinels"]{color:#4ade80;}.mbti-discover-opt[data-group="sentinels"].active{background:#4ade8033;}
+.mbti-discover-opt[data-group="explorers"]{color:#f5a623;}.mbti-discover-opt[data-group="explorers"].active{background:#f5a62333;}
+
+/* ── CATEGORY NAV ── */
+.cat-nav{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none;}
+.cat-nav::-webkit-scrollbar{display:none;}
+.cat-chip{display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:99px;font-size:12px;font-weight:600;color:var(--t3);background:var(--card);border:1px solid var(--line);cursor:pointer;white-space:nowrap;transition:all .2s;font-family:inherit;}
+.cat-chip:hover{color:var(--t2);border-color:var(--t3);}
+.cat-chip.active{color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent);border-color:color-mix(in srgb,var(--accent) 30%,transparent);}
+.cat-chip i{font-size:11px;}
+
+/* ── ARTICLE GRID (list page) ── */
+.articles-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.article-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;cursor:pointer;transition:border-color .2s,transform .15s;}
+.article-card:hover{border-color:var(--t3);transform:translateY(-2px);}
+.article-card-cover{height:120px;position:relative;overflow:hidden;}
+.article-card-cover-gradient{position:absolute;inset:0;}
+.article-card-cover-overlay{position:absolute;inset:0;background:var(--article-cover-overlay);display:flex;align-items:flex-end;padding:12px;}
+.article-card-cover-tags{display:flex;gap:4px;}
+.article-card-cover-tag{font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--t1);background:var(--article-tag-bg);padding:2px 6px;border-radius:4px;}
+.article-card-body{padding:14px;}
+.article-card-title{font-size:14px;font-weight:700;line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.article-card-excerpt{font-size:12px;color:var(--t3);line-height:1.5;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.article-card-footer{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--t3);}
+.article-card-author{display:flex;align-items:center;gap:5px;}
+.article-card-views{display:flex;align-items:center;gap:4px;}
+
+/* ── SIDEBAR WIDGETS ── */
+.hot-list{display:flex;flex-direction:column;gap:8px;}
+.hot-item{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:6px 0;border-bottom:1px solid var(--line);transition:color .15s;}
+.hot-item:last-child{border-bottom:none;}
+.hot-item:hover .hot-title{color:var(--accent);}
+.hot-rank{font-size:14px;font-weight:900;color:var(--t3);min-width:20px;font-variant-numeric:tabular-nums;}
+.hot-rank.top3{color:var(--accent);}
+.hot-title{font-size:12px;font-weight:500;color:var(--t2);line-height:1.4;transition:color .15s;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+
+.tag-cloud{display:flex;flex-wrap:wrap;gap:6px;}
+.tag-pill{padding:4px 10px;border-radius:99px;font-size:11px;font-weight:500;color:var(--t3);background:var(--bg);border:1px solid var(--line);cursor:pointer;transition:all .15s;}
+.tag-pill:hover{color:var(--t2);border-color:var(--t3);}
+
+.trend-list{display:flex;flex-direction:column;gap:6px;}
+.trend-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);padding:6px 8px;border-radius:var(--r);transition:background .15s;cursor:pointer;}
+.trend-item:hover{background:var(--bg);}
+.trend-icon{font-size:10px;color:var(--accent);}
+.trend-label{flex:1;}
+.trend-delta{font-size:11px;font-weight:700;color:#4ade80;}
+
+/* ── ARTICLE DETAIL ── */
+.detail-header{position:relative;border-radius:var(--r2);overflow:hidden;margin-bottom:24px;}
+.detail-cover{height:240px;position:relative;}
+.detail-cover-gradient{position:absolute;inset:0;}
+.detail-cover-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,rgba(0,0,0,.3) 50%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:28px;}
+.detail-back{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t2);cursor:pointer;margin-bottom:16px;transition:color .15s;background:none;border:none;font-family:inherit;}
+.detail-back:hover{color:var(--t1);}
+.detail-eyebrow{font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;display:flex;gap:8px;align-items:center;}
+.detail-eyebrow span{opacity:.4;}
+.detail-title{font-size:24px;font-weight:900;line-height:1.2;letter-spacing:-.5px;margin-bottom:12px;}
+.detail-meta{display:flex;align-items:center;gap:16px;font-size:12px;color:var(--t2);}
+.detail-meta-item{display:flex;align-items:center;gap:5px;}
+.detail-body{max-width:680px;margin:0 auto;}
+.detail-body p{font-size:14px;line-height:1.8;color:var(--t2);margin-bottom:16px;}
+.detail-body blockquote{border-left:3px solid var(--accent);padding:12px 16px;margin:16px 0;background:color-mix(in srgb,var(--accent) 5%,transparent);border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--t2);font-style:italic;}
+.detail-body h2{font-size:18px;font-weight:800;margin:24px 0 12px;color:var(--t1);}
+.detail-related{margin-top:32px;padding-top:24px;border-top:1px solid var(--line);}
+.detail-related-title{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+.detail-related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+
+/* ── LOAD MORE ── */
+.load-more{display:flex;justify-content:center;padding:16px 0;}
+.load-more-btn{padding:8px 24px;border-radius:99px;font-size:12px;font-weight:600;color:var(--t2);background:var(--card);border:1px solid var(--line);cursor:pointer;transition:all .15s;font-family:inherit;}
+.load-more-btn:hover{color:var(--t1);border-color:var(--t3);}
+
+/* ── RIGHT SIDEBAR ARTICLES SECTION ── */
+.sidebar-section{margin-bottom:4px;}
 </style>
 </head>
 <body>
@@ -319,6 +461,10 @@ body{font-family:"Outfit",system-ui,sans-serif;background:var(--bg);color:var(--
         </div>
       </div>
     </div>
+    <div class="page-tabs">
+      <button class="page-tab active" data-page="dashboard"><i class="fa-solid fa-table-columns" style="margin-right:5px;font-size:10px;"></i>工作台</button>
+      <button class="page-tab" data-page="articles"><i class="fa-solid fa-compass" style="margin-right:5px;font-size:10px;"></i>发现</button>
+    </div>
     <div class="topbar-meta">
       <div class="streak-badge"><i class="fa-solid fa-fire"></i> <span id="streakNum">7</span> 天连续</div>
       <div class="clock" id="clock">--:--:--</div>
@@ -326,107 +472,168 @@ body{font-family:"Outfit",system-ui,sans-serif;background:var(--bg);color:var(--
   </header>
 
   <div class="main">
-    <div class="left">
-      <!-- DAILY SPARK -->
-      <div class="daily-spark-wrap" id="dailySparkWrap">
-        <div class="spark-eyebrow"><i class="fa-solid fa-seedling"></i> 今日灵感引导</div>
-        <div class="spark-text" id="sparkText"></div>
-      </div>
+    <!-- PAGE: Dashboard -->
+    <div class="page-container active" id="page-dashboard" data-layout="dashboard">
+      <div class="left">
+        <!-- DAILY SPARK -->
+        <div class="daily-spark-wrap" id="dailySparkWrap">
+          <div class="spark-eyebrow"><i class="fa-solid fa-seedling"></i> 今日灵感引导</div>
+          <div class="spark-text" id="sparkText"></div>
+        </div>
 
-      <!-- ENERGY + JOURNAL -->
-      <div>
-        <div class="s-label"><i class="fa-solid fa-bolt"></i> 今日状态</div>
-        <div class="energy-wrap">
-          <div class="energy-top">
-            <div class="greeting-block">
-              <div class="greeting-text" id="greetText">早上好 ☀️</div>
-              <div class="greeting-sub" id="greetSub">今天的你，能量满格吗？</div>
+        <!-- ENERGY + JOURNAL -->
+        <div>
+          <div class="s-label"><i class="fa-solid fa-bolt"></i> 今日状态</div>
+          <div class="energy-wrap">
+            <div class="energy-top">
+              <div class="greeting-block">
+                <div class="greeting-text" id="greetText">早上好 ☀️</div>
+                <div class="greeting-sub" id="greetSub">今天的你，能量满格吗？</div>
+              </div>
+              <div class="vitals-row" id="vitals"></div>
             </div>
-            <div class="vitals-row" id="vitals"></div>
+            <div class="journal-divider"></div>
+            <div class="journal-label">
+              <span><i class="fa-solid fa-pen" style="opacity:.5;margin-right:5px;"></i>今日随笔</span>
+              <span class="journal-save-hint">Ctrl+↵ 保存</span>
+            </div>
+            <textarea class="journal-ta" id="journalTa" placeholder="写下今天的感受、想法、或者任何一闪而过的念头…" maxlength="500"></textarea>
+            <div class="journal-saved-bar" id="journalSavedBar" style="opacity:0;"></div>
           </div>
-          <div class="journal-divider"></div>
-          <div class="journal-label">
-            <span><i class="fa-solid fa-pen" style="opacity:.5;margin-right:5px;"></i>今日随笔</span>
-            <span class="journal-save-hint">Ctrl+↵ 保存</span>
+        </div>
+
+        <!-- THREADS -->
+        <div>
+          <div class="s-label"><i class="fa-solid fa-layer-group"></i> 并行任务线 <button class="new-project-btn" id="newThreadBtn" style="margin-left:auto;"><i class="fa-solid fa-plus"></i> 新任务线</button></div>
+          <div class="threads-bubble-zone" id="threadsBubbleZone">
+            <div class="threads-grid" id="threadsGrid"></div>
           </div>
-          <textarea class="journal-ta" id="journalTa" placeholder="写下今天的感受、想法、或者任何一闪而过的念头…" maxlength="500"></textarea>
-          <div class="journal-saved-bar" id="journalSavedBar" style="opacity:0;"></div>
+        </div>
+
+        <!-- DESIGN FLOW -->
+        <div>
+          <div class="s-label"><i class="fa-solid fa-pen-nib"></i> 设计进度</div>
+          <div class="design-card">
+            <div class="design-card-head">
+              <div>
+                <div class="design-project-name" id="dpName">工作前台仪表盘</div>
+                <div class="design-project-sub" id="dpSub">截止 2026-05-10 · 点击阶段更新进度</div>
+              </div>
+              <button class="new-project-btn" id="newProjectBtn"><i class="fa-solid fa-plus"></i> 新项目</button>
+            </div>
+            <div class="flow-stages" id="flowStages"></div>
+          </div>
+        </div>
+
+        <!-- FEATURED ARTICLES -->
+        <div>
+          <div class="s-label"><i class="fa-solid fa-star"></i> 精选文章</div>
+          <div class="featured-grid" id="featuredGrid"></div>
+        </div>
+
+        <!-- DEEP READ -->
+        <div>
+          <div class="s-label"><i class="fa-solid fa-book-open"></i> 深读推荐</div>
+          <div id="deepReadWrap"></div>
         </div>
       </div>
 
-      <!-- THREADS -->
-      <div>
-        <div class="s-label"><i class="fa-solid fa-layer-group"></i> 并行任务线 <button class="new-project-btn" id="newThreadBtn" style="margin-left:auto;"><i class="fa-solid fa-plus"></i> 新任务线</button></div>
-        <div class="threads-grid" id="threadsGrid"></div>
-      </div>
-
-      <!-- DESIGN FLOW -->
-      <div>
-        <div class="s-label"><i class="fa-solid fa-pen-nib"></i> 设计进度</div>
-        <div class="design-card">
-          <div class="design-card-head">
-            <div>
-              <div class="design-project-name" id="dpName">工作前台仪表盘</div>
-              <div class="design-project-sub" id="dpSub">截止 2026-05-10 · 点击阶段更新进度</div>
-            </div>
-            <button class="new-project-btn" id="newProjectBtn"><i class="fa-solid fa-plus"></i> 新项目</button>
+      <div class="right">
+        <!-- FOUR-QUADRANT TODO -->
+        <div>
+          <div class="s-label"><i class="fa-regular fa-circle-check"></i> 四象限待办 <button class="todo-collapse-btn" id="todoCollapseBtn"><i class="fa-solid fa-chevron-down"></i></button></div>
+          <div class="todo-section-body" id="todoSectionBody">
+          <div class="todo-add-row">
+            <input class="todo-input" id="todoIn" placeholder="添加一件事…" maxlength="60"/>
+            <select class="q-select" id="qSel">
+              <option value="ui">🔴 紧急重要</option>
+              <option value="si" selected>🟡 重要不紧</option>
+              <option value="un">🔵 紧急不重</option>
+              <option value="sn">✅ 已完成区</option>
+            </select>
+            <button class="todo-btn" id="todoAddBtn"><i class="fa-solid fa-plus"></i></button>
           </div>
-          <div class="flow-stages" id="flowStages"></div>
+          <div class="q-matrix-wrap" id="qMatrix">
+            <div class="q-tint ui"></div>
+            <div class="q-tint si"></div>
+            <div class="q-tint un"></div>
+            <div class="q-axis-label top">重要 ↑</div>
+            <div class="q-axis-label bottom">不重要</div>
+            <div class="q-axis-label left">不紧急</div>
+            <div class="q-axis-label right">紧急 →</div>
+            <div class="q-corner ui">立刻做</div>
+            <div class="q-corner si">计划做</div>
+            <div class="q-corner un">委托做</div>
+            <!-- done panel replaces sn quadrant -->
+            <div class="q-done-panel" id="qDonePanel">
+              <div class="q-done-label">✅ 已完成</div>
+              <div class="q-done-list" id="qDoneList"></div>
+            </div>
+          </div>
+          <div class="todo-stats">
+            <span class="todo-stat-text" id="todoStatL">0/0</span>
+            <div class="todo-progress-bar"><div class="todo-progress-fill" id="todoProgressFill" style="width:0%"></div></div>
+            <span class="todo-stat-text" id="todoStatR">0%</span>
+          </div>
+          </div>
+
+        <!-- SYNC -->
+        <div>
+          <div class="s-label"><i class="fa-solid fa-rotate"></i> 同步</div>
+          <button class="refresh-btn" id="refreshBtn"><i class="fa-solid fa-arrows-rotate"></i> 刷新全部</button>
+          <div class="sync-list" id="syncList"></div>
+        </div>
+
+        <!-- FLASH -->
+        <div>
+          <div class="s-label"><i class="fa-solid fa-lightbulb"></i> 灵感速记 <span style="color:var(--t3);font-size:9px;letter-spacing:.5px;text-transform:none;font-weight:400;margin-left:4px;">Ctrl+↵</span></div>
+          <textarea class="flash-ta" id="flashTa" placeholder="脑子里突然冒出来的…"></textarea>
+          <button class="flash-save" id="flashSave"><i class="fa-solid fa-bookmark"></i> 存入灵感本</button>
+          <div class="flash-items" id="flashItems"></div>
+        </div>
+
+        <!-- HOT RANKINGS -->
+        <div>
+          <div class="s-label"><i class="fa-solid fa-fire-flame-curved"></i> 热门排行</div>
+          <div class="hot-list" id="hotList"></div>
         </div>
       </div>
     </div>
 
-    <div class="right">
-      <!-- FOUR-QUADRANT TODO -->
-      <div>
-        <div class="s-label"><i class="fa-regular fa-circle-check"></i> 四象限待办</div>
-        <div class="todo-add-row">
-          <input class="todo-input" id="todoIn" placeholder="添加一件事…" maxlength="60"/>
-          <select class="q-select" id="qSel">
-            <option value="ui">🔴 紧急重要</option>
-            <option value="si" selected>🟡 重要不紧</option>
-            <option value="un">🔵 紧急不重</option>
-            <option value="sn">✅ 已完成区</option>
-          </select>
-          <button class="todo-btn" id="todoAddBtn"><i class="fa-solid fa-plus"></i></button>
+    <!-- PAGE: Articles -->
+    <div class="page-container" id="page-articles" data-layout="articles">
+      <div class="left">
+        <div class="mbti-discover" id="mbtiDiscover"></div>
+        <div class="cat-nav" id="catNav"></div>
+        <div class="articles-grid" id="articlesGrid"></div>
+        <div class="load-more"><button class="load-more-btn" id="loadMoreBtn">加载更多</button></div>
+      </div>
+      <div class="right">
+        <div class="sidebar-section">
+          <div class="s-label"><i class="fa-solid fa-fire-flame-curved"></i> 热门文章</div>
+          <div class="hot-list" id="sidebarHotList"></div>
         </div>
-        <div class="q-matrix-wrap" id="qMatrix">
-          <div class="q-tint ui"></div>
-          <div class="q-tint si"></div>
-          <div class="q-tint un"></div>
-          <div class="q-axis-label top">重要 ↑</div>
-          <div class="q-axis-label bottom">不重要</div>
-          <div class="q-axis-label left">不紧急</div>
-          <div class="q-axis-label right">紧急 →</div>
-          <div class="q-corner ui">立刻做</div>
-          <div class="q-corner si">计划做</div>
-          <div class="q-corner un">委托做</div>
-          <!-- done panel replaces sn quadrant -->
-          <div class="q-done-panel" id="qDonePanel">
-            <div class="q-done-label">✅ 已完成</div>
-            <div class="q-done-list" id="qDoneList"></div>
-          </div>
+        <div class="sidebar-section">
+          <div class="s-label"><i class="fa-solid fa-tags"></i> 标签云</div>
+          <div class="tag-cloud" id="tagCloud"></div>
         </div>
-        <div class="todo-stats">
-          <span class="todo-stat-text" id="todoStatL">0/0</span>
-          <div class="todo-progress-bar"><div class="todo-progress-fill" id="todoProgressFill" style="width:0%"></div></div>
-          <span class="todo-stat-text" id="todoStatR">0%</span>
+        <div class="sidebar-section">
+          <div class="s-label"><i class="fa-solid fa-arrow-trend-up"></i> 本周趋势</div>
+          <div class="trend-list" id="trendList"></div>
         </div>
       </div>
+    </div>
 
-      <!-- SYNC -->
-      <div>
-        <div class="s-label"><i class="fa-solid fa-rotate"></i> 同步</div>
-        <button class="refresh-btn" id="refreshBtn"><i class="fa-solid fa-arrows-rotate"></i> 刷新全部</button>
-        <div class="sync-list" id="syncList"></div>
+    <!-- PAGE: Article Detail -->
+    <div class="page-container" id="page-article-detail" data-layout="detail">
+      <div class="left">
+        <div id="articleDetailContent"></div>
       </div>
-
-      <!-- FLASH -->
-      <div>
-        <div class="s-label"><i class="fa-solid fa-lightbulb"></i> 灵感速记 <span style="color:var(--t3);font-size:9px;letter-spacing:.5px;text-transform:none;font-weight:400;margin-left:4px;">Ctrl+↵</span></div>
-        <textarea class="flash-ta" id="flashTa" placeholder="脑子里突然冒出来的…"></textarea>
-        <button class="flash-save" id="flashSave"><i class="fa-solid fa-bookmark"></i> 存入灵感本</button>
-        <div class="flash-items" id="flashItems"></div>
+      <div class="right">
+        <div class="sidebar-section">
+          <div class="s-label"><i class="fa-solid fa-fire-flame-curved"></i> 热门文章</div>
+          <div class="hot-list" id="detailHotList"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -483,6 +690,7 @@ body{font-family:"Outfit",system-ui,sans-serif;background:var(--bg);color:var(--
     </div>
   </div>
 </div>
+<script>
 const $ = id => document.getElementById(id);
 const load = (k,d) => { try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch{return d;} };
 const save = (k,v) => { try{localStorage.setItem(k,JSON.stringify(v));}catch{} };
@@ -818,6 +1026,76 @@ function renderThreads() {
 }
 renderThreads();
 
+// ── thread bubbles (mouse-following) ───────────────────────────────────
+(function initBubbles() {
+  const zone = $('threadsBubbleZone');
+  if (!zone) return;
+  const BUBBLE_COUNT = 7;
+  const bubbles = [];
+  const threadColors = threads.map(t => t.color);
+  if (!threadColors.length) threadColors.push('#f0537a','#3ecfcf','#9de84b','#9b6dff','#f5a623');
+
+  for (let i = 0; i < BUBBLE_COUNT; i++) {
+    const el = document.createElement('div');
+    el.className = 'thread-bubble';
+    const size = 40 + Math.random() * 40;
+    const color = threadColors[i % threadColors.length];
+    el.style.cssText = `width:${size}px;height:${size}px;background:${color};left:${Math.random()*80+10}%;top:${Math.random()*70+10}%;`;
+    zone.appendChild(el);
+    bubbles.push({
+      el, size,
+      baseX: Math.random() * 80 + 10,
+      baseY: Math.random() * 70 + 10,
+      phase: Math.random() * Math.PI * 2,
+      speedX: 0.3 + Math.random() * 0.4,
+      speedY: 0.2 + Math.random() * 0.3,
+      ampX: 8 + Math.random() * 12,
+      ampY: 6 + Math.random() * 10,
+      x: 0, y: 0,
+    });
+  }
+
+  let mouseInZone = false, mouseX = 50, mouseY = 50;
+
+  zone.addEventListener('mouseenter', () => { mouseInZone = true; });
+  zone.addEventListener('mouseleave', () => { mouseInZone = false; });
+  zone.addEventListener('mousemove', e => {
+    const r = zone.getBoundingClientRect();
+    mouseX = ((e.clientX - r.left) / r.width) * 100;
+    mouseY = ((e.clientY - r.top) / r.height) * 100;
+  });
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  let time = 0;
+  function animate() {
+    time += 0.016;
+    bubbles.forEach((b, i) => {
+      const isAttracted = mouseInZone && i < 3;
+      const factor = mouseInZone && !isAttracted ? 0.3 : 1;
+      const floatX = Math.sin(time * b.speedX + b.phase) * b.ampX * factor;
+      const floatY = Math.cos(time * b.speedY + b.phase * 1.3) * b.ampY * factor;
+      let targetX = b.baseX + floatX;
+      let targetY = b.baseY + floatY;
+
+      if (isAttracted) {
+        const offsetX = (i - 1) * 6;
+        const offsetY = (i - 1) * 4;
+        targetX = lerp(targetX, mouseX + offsetX, 0.06);
+        targetY = lerp(targetY, mouseY + offsetY, 0.06);
+      }
+
+      b.x = lerp(b.x, targetX, 0.08);
+      b.y = lerp(b.y, targetY, 0.08);
+      b.el.style.left = b.x + '%';
+      b.el.style.top = b.y + '%';
+    });
+    requestAnimationFrame(animate);
+  }
+  bubbles.forEach(b => { b.x = b.baseX; b.y = b.baseY; });
+  animate();
+})();
+
 // ── design flow ────────────────────────────────────────────────────────────────
 function renderFlow() {
   $('dpName').textContent = project.name;
@@ -865,6 +1143,7 @@ const Q_LABELS = { ui:'立刻做', si:'计划做', un:'委托做', sn:'已完成
 
 let activeDotId = null, dragDotEl = null, dragOffX=0, dragOffY=0;
 let activeTooltipEl = null;
+let tooltipHideTimer = null, activeTooltipTodoId = null;
 
 function qCoordForId(id) {
   const todo = todos.find(t => t.id === id);
@@ -950,8 +1229,10 @@ function renderMatrix() {
       showToast('🗑️ 已删除');
     });
 
-    dot.addEventListener('mouseenter', () => { tip.style.display='block'; dot.classList.add('hover'); activeTooltipEl=tip; });
-    dot.addEventListener('mouseleave', () => { if(activeDotId!==todo.id){tip.style.display='none'; dot.classList.remove('hover');} });
+    dot.addEventListener('mouseenter', () => { clearTimeout(tooltipHideTimer); $('qMatrix').querySelectorAll('.q-tooltip').forEach(t=>t.style.display='none'); $('qMatrix').querySelectorAll('.q-dot').forEach(d=>d.classList.remove('hover')); tip.style.display='block'; dot.classList.add('hover'); activeTooltipTodoId=todo.id; });
+    dot.addEventListener('mouseleave', () => { tooltipHideTimer=setTimeout(()=>{if(activeTooltipTodoId===todo.id){tip.style.display='none'; dot.classList.remove('hover'); activeTooltipTodoId=null;}},300); });
+    tip.addEventListener('mouseenter', () => { clearTimeout(tooltipHideTimer); });
+    tip.addEventListener('mouseleave', () => { tooltipHideTimer=setTimeout(()=>{tip.style.display='none'; dot.classList.remove('hover'); activeTooltipTodoId=null;},200); });
 
     // drag
     dot.addEventListener('mousedown', e => {
@@ -1033,6 +1314,19 @@ function updateTodoStats() {
 
 renderMatrix(); updateTodoStats();
 
+// ── todo section collapse ─────────────────────────────────────────────────
+const todoCollapsed = load('fp3_todo_collapsed', false);
+const todoBody = $('todoSectionBody');
+const todoCollapseBtn = $('todoCollapseBtn');
+if (todoCollapsed && todoBody) { todoBody.classList.add('collapsed'); if(todoCollapseBtn) todoCollapseBtn.classList.add('collapsed'); }
+if (todoCollapseBtn) {
+  todoCollapseBtn.addEventListener('click', () => {
+    const isCollapsed = todoBody.classList.toggle('collapsed');
+    todoCollapseBtn.classList.toggle('collapsed', isCollapsed);
+    save('fp3_todo_collapsed', isCollapsed);
+  });
+}
+
 // ── sync ───────────────────────────────────────────────────────────────────────
 function renderSync() {
   const c=$('syncList'); c.innerHTML='';
@@ -1086,6 +1380,8 @@ function applyMbti(type){
   document.querySelector('.brand-dot').style.background=color;
   document.querySelector('.brand-dot').style.boxShadow=`0 0 8px ${color}`;
   document.title=`FlowSpace · ${type}`;
+  document.documentElement.style.setProperty('--accent', color);
+  document.documentElement.style.setProperty('--article-tag-bg', `color-mix(in srgb, ${color} 12%, transparent)`);
   document.querySelectorAll('.mbti-option').forEach(el=>el.classList.toggle('selected',el.dataset.type===type));
   const avatar = $('mbtiAvatar');
   if (type === 'ENFP') {
@@ -1239,6 +1535,482 @@ $('thConfirmBtn').addEventListener('click', () => {
   showToast(`🚀 任务线「${name}」已创建`);
   eggBurst(window.innerWidth/2, window.innerHeight/3, thColor, 14);
 });
+// ── ARTICLE DATA ────────────────────────────────────────────────────────
+const CATEGORIES = [
+  { id: 'all', label: '全部', icon: 'fa-layer-group' },
+  { id: 'mbti', label: 'MBTI', icon: 'fa-brain' },
+  { id: 'career', label: '职场', icon: 'fa-briefcase' },
+  { id: 'creative', label: '创意', icon: 'fa-palette' },
+  { id: 'social', label: '人际', icon: 'fa-users' },
+  { id: 'growth', label: '成长', icon: 'fa-seedling' },
+];
+
+const ARTICLES = [
+  {
+    id: 1,
+    title: 'ENFP 的创意爆发力：如何在工作中发挥你的 Ne 优势',
+    excerpt: '作为 MBTI 中最具创造力的类型之一，ENFP 的主导功能外向直觉（Ne）赋予了他们独特的发散思维能力。本文深入探讨如何将这种天赋转化为职场竞争力。',
+    category: 'growth',
+    tags: ['ENFP', '创意', '认知功能'],
+    author: '小面',
+    date: '2026-04-28',
+    views: 1240,
+    coverColors: ['#f0537a', '#9b6dff'],
+    featured: true,
+    deepRead: false,
+    body: '<p>ENFP 的外向直觉（Ne）是一种强大的认知功能，它让你能够看到别人看不到的可能性。在工作中，这意味着你擅长头脑风暴、发现新机会、连接看似无关的概念。</p><h2>Ne 在工作中的表现</h2><p>当你处于最佳状态时，你的 Ne 功能会让你：快速产生大量创意，在会议中提出意想不到的解决方案，看到项目的多种可能性，激发团队的创造力。</p><blockquote>「创意不是等待灵感降临，而是主动探索可能性的边界。」</blockquote><h2>如何刻意练习 Ne</h2><p>每天花 15 分钟做「可能性日记」——记录你今天看到的三个新机会或新想法。不需要可行，不需要完美，只需要新鲜。这个简单的练习能帮你保持 Ne 的活跃度。</p><p>另一个有效的方法是跨领域学习。ENFP 天生对多个领域感兴趣，不要压抑这种倾向。你在一个领域学到的知识，往往能在另一个领域产生意想不到的应用。</p>'
+  },
+  {
+    id: 2,
+    title: 'MBTI 团队协作指南：16 种类型的沟通密码',
+    excerpt: '了解不同 MBTI 类型的沟通偏好，让你的团队协作更加顺畅。从 INTJ 的直接了当到 ENFP 的热情洋溢，每种类型都有独特的价值。',
+    category: 'mbti',
+    tags: ['MBTI', '团队', '沟通'],
+    author: '小面',
+    date: '2026-04-27',
+    views: 2380,
+    coverColors: ['#9b6dff', '#3ecfcf'],
+    featured: true,
+    deepRead: false,
+    body: '<p>在任何团队中，沟通都是最关键的环节。而 MBTI 提供了一个理解沟通差异的框架。</p><h2>分析家的沟通风格</h2><p>INTJ、INTP、ENTJ、ENTP 这四种类型倾向于逻辑驱动的沟通。他们喜欢数据、喜欢直接、喜欢效率。与他们沟通时，先说结论，再给论据。</p><h2>外交家的沟通风格</h2><p>INFJ、INFP、ENFJ、ENFP 这四种类型更注重情感连接。他们需要感受到被理解、被尊重。与他们沟通时，先建立连接，再讨论内容。</p><blockquote>「好的沟通不是让所有人说同一种语言，而是让每种语言都被听到。」</blockquote>'
+  },
+  {
+    id: 3,
+    title: '创意工作者的时间管理：别用番茄钟了',
+    excerpt: '传统的时间管理方法可能不适合创意工作者。探索更适合发散思维者的时间管理策略，让灵感和效率并存。',
+    category: 'creative',
+    tags: ['时间管理', '创意', '效率'],
+    author: '阿面',
+    date: '2026-04-26',
+    views: 1890,
+    coverColors: ['#f5a623', '#f0537a'],
+    featured: true,
+    deepRead: false,
+    body: '<p>如果你是一个创意工作者，你可能已经发现：番茄钟对你不太管用。25 分钟的专注时间块，对需要灵感涌现的工作来说，可能恰好打断了你的思路。</p><h2>为什么番茄钟不适合创意工作</h2><p>创意工作有「预热期」——你需要时间进入状态。25 分钟可能刚好让你热身完毕，就被迫休息了。</p><h2>替代方案：能量周期法</h2><p>与其按时间切割，不如按能量状态管理。高能量时段做创造性工作，低能量时段做行政性工作。</p>'
+  },
+  {
+    id: 4,
+    title: 'INTJ 与 ENFP：为什么这对组合如此强大',
+    excerpt: '从认知功能的角度解析 INTJ-ENFP 的黄金搭档关系，理解为什么这两种看似截然不同的类型能产生最强的化学反应。',
+    category: 'mbti',
+    tags: ['INTJ', 'ENFP', '关系'],
+    author: '小面',
+    date: '2026-04-25',
+    views: 3450,
+    coverColors: ['#9b6dff', '#f0537a'],
+    featured: false,
+    deepRead: true,
+    body: '<p>在 MBTI 的 16 种类型中，INTJ 和 ENFP 的组合常常被称为「黄金搭档」。这两种类型看似截然不同——一个内向理性，一个外向感性——但他们的认知功能恰好完美互补。</p><h2>认知功能的互补</h2><p>ENFP 的功能栈：Ne-Fi-Te-Si。INTJ 的功能栈：Ni-Te-Fi-Se。注意到了吗？他们的辅助和第三功能恰好互为镜像。这意味着他们用不同的方式到达相似的结论。</p><blockquote>「INTJ 给 ENFP 一个方向，ENFP 给 INTJ 无限可能。」</blockquote><h2>工作中的化学反应</h2><p>在工作中，INTJ 提供战略框架和执行计划，ENFP 提供创意灵感和人际连接。INTJ 帮助 ENFP 聚焦，ENFP 帮助 INTJ 拓展视野。</p><p>这种互补不是竞争，而是协同。当两个人都能欣赏对方的长处时，产出的质量会远超单独工作。</p>'
+  },
+  {
+    id: 5,
+    title: '职场中的「隐性规则」：给理想主义者的生存指南',
+    excerpt: '作为 NF 类型，你可能觉得职场政治令人疲惫。但理解这些「隐性规则」不等于放弃原则，而是为了更好地保护你的理想。',
+    category: 'career',
+    tags: ['职场', 'NF类型', '生存指南'],
+    author: '阿面',
+    date: '2026-04-24',
+    views: 1560,
+    coverColors: ['#3ecfcf', '#4ade80'],
+    featured: false,
+    deepRead: false,
+    body: '<p>作为 NF 类型（INFJ、INFP、ENFJ、ENFP），你天生追求真实和意义。但职场中存在一些「隐性规则」——没人明说，但影响深远。</p><h2>规则一：可见度很重要</h2><p>默默做好工作是不够的。你需要让合适的人知道你的贡献。这不是炫耀，而是确保你的价值被看见。</p><h2>规则二：关系网络是资产</h2><p>NF 类型天生擅长建立深层连接，但在职场中，浅层连接同样重要。维护一个广泛的职业网络，不是功利，是明智。</p>'
+  },
+  {
+    id: 6,
+    title: '如何与 ISFJ 合作：守护者的力量',
+    excerpt: 'ISFJ 是最被低估的类型之一。他们默默维护着团队的稳定性和连续性。学会欣赏和配合 ISFJ，会让团队效能倍增。',
+    category: 'social',
+    tags: ['ISFJ', '合作', '团队'],
+    author: '小面',
+    date: '2026-04-23',
+    views: 890,
+    coverColors: ['#4ade80', '#3ecfcf'],
+    featured: false,
+    deepRead: false,
+    body: '<p>ISFJ 常常是团队中最安静的人，但也是最不可或缺的人。他们用行动而非言语表达关心，用细节而非宏大叙事维护秩序。</p><h2>ISFJ 的核心优势</h2><p>可靠性、细致、耐心、实际。当团队陷入混乱时，ISFJ 是那个默默整理文档、跟进细节、确保一切照常运转的人。</p>'
+  },
+  {
+    id: 7,
+    title: '从 ENFP 到创业者：用直觉做决策的科学',
+    excerpt: 'ENFP 的直觉不是「感觉」，而是一种高效的信息处理模式。理解这一点，你就能更有信心地用直觉做重要决策。',
+    category: 'career',
+    tags: ['ENFP', '创业', '决策'],
+    author: '阿面',
+    date: '2026-04-22',
+    views: 2100,
+    coverColors: ['#f0537a', '#f5a623'],
+    featured: false,
+    deepRead: false,
+    body: '<p>很多人觉得「跟着直觉走」是不科学的。但认知科学告诉我们：直觉其实是大脑在无意识层面进行的高速模式匹配。</p><h2>ENFP 的直觉从何而来</h2><p>ENFP 的主导功能 Ne（外向直觉）让他们能快速捕捉环境中的模式和可能性。这种能力不是魔法，而是大脑对大量信息进行并行处理的结果。</p>'
+  },
+  {
+    id: 8,
+    title: '内向者的社交策略：不需要变成外向者',
+    excerpt: '社交不是外向者的专利。内向者有自己独特的社交优势——深度对话、倾听能力、以及让人感到被理解的天赋。',
+    category: 'social',
+    tags: ['内向', '社交', '自我接纳'],
+    author: '小面',
+    date: '2026-04-21',
+    views: 1780,
+    coverColors: ['#9b6dff', '#3ecfcf'],
+    featured: false,
+    deepRead: false,
+    body: '<p>在一个推崇外向的文化中，内向者常常觉得自己需要「改变」。但真相是：你不需要变成外向者，你需要的是找到适合自己的社交方式。</p><h2>内向者的社交优势</h2><p>深度而非广度——内向者倾向于建立少量但深入的关系。质量胜过数量。</p>'
+  },
+  {
+    id: 9,
+    title: '认知功能进阶：理解你的「阴影功能」',
+    excerpt: '除了你的主导和辅助功能，你还有四个「阴影功能」。理解它们能帮你更好地认识自己的盲点和成长方向。',
+    category: 'mbti',
+    tags: ['认知功能', '成长', '阴影'],
+    author: '阿面',
+    date: '2026-04-20',
+    views: 960,
+    coverColors: ['#f5a623', '#9b6dff'],
+    featured: false,
+    deepRead: false,
+    body: '<p>每个 MBTI 类型都有四个主要认知功能（前四功能），但还有四个「阴影功能」——它们通常在压力或不健康状态下浮现。</p><h2>什么是阴影功能</h2><p>阴影功能是你功能栈中后四位的功能。它们不像主导功能那样自然流畅，但在特定情境下会发挥作用。</p>'
+  },
+  {
+    id: 10,
+    title: '设计思维 × MBTI：用性格类型优化创意流程',
+    excerpt: '将 MBTI 框架融入设计思维的五个阶段，让不同性格的成员在最适合的阶段发挥最大价值。',
+    category: 'creative',
+    tags: ['设计思维', 'MBTI', '创意流程'],
+    author: '小面',
+    date: '2026-04-19',
+    views: 1340,
+    coverColors: ['#f0537a', '#9de84b'],
+    featured: false,
+    deepRead: false,
+    body: '<p>设计思维的五个阶段——共情、定义、构思、原型、测试——每个阶段都适合不同的性格类型。</p><h2>共情阶段：NF 类型的主场</h2><p>INFJ、INFP、ENFJ、ENFP 天生擅长理解他人的情感和需求。让他们主导用户研究和共情地图的绘制。</p>'
+  },
+];
+
+let currentCategory = load('fp3_cat', 'all');
+let articlesPage = 1;
+const ARTICLES_PER_PAGE = 6;
+
+// ── PAGE SWITCHING ──────────────────────────────────────────────────────
+function showPage(page) {
+  document.querySelectorAll('.page-container').forEach(el => {
+    el.classList.remove('active');
+  });
+  const target = document.getElementById('page-' + page);
+  if (target) target.classList.add('active');
+
+  document.querySelectorAll('.page-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.page === page);
+  });
+
+  if (page === 'articles') renderArticlesPage();
+  if (page === 'dashboard') renderDashboardArticles();
+}
+
+document.querySelectorAll('.page-tab').forEach(tab => {
+  tab.addEventListener('click', () => showPage(tab.dataset.page));
+});
+
+// ── COVER GENERATION ────────────────────────────────────────────────────
+function makeCoverGradient(colors, angle) {
+  if (!angle) angle = 135;
+  return `linear-gradient(${angle}deg, ${colors[0]}44, ${colors[1] || colors[0]}22, var(--card) 100%)`;
+}
+
+function makeCoverHTML(article, heightClass) {
+  const gradient = makeCoverGradient(article.coverColors);
+  const tagsHTML = article.tags.slice(0, 2).map(t => `<span class="article-card-cover-tag">${t}</span>`).join('');
+  return `<div class="article-card-cover ${heightClass || ''}" style="height:100%">
+    <div class="article-card-cover-gradient" style="background:${gradient}"></div>
+    <div class="article-card-cover-overlay"><div class="article-card-cover-tags">${tagsHTML}</div></div>
+  </div>`;
+}
+
+// ── DASHBOARD ARTICLES ──────────────────────────────────────────────────
+function renderFeaturedArticles() {
+  const grid = $('featuredGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  const featured = ARTICLES.filter(a => a.featured).slice(0, 4);
+  featured.forEach(article => {
+    const card = document.createElement('div');
+    card.className = 'article-card-sm';
+    card.innerHTML = `
+      ${makeCoverHTML(article)}
+      <div class="article-card-body">
+        <div class="article-card-title">${article.title}</div>
+        <div class="article-card-meta">
+          <span><i class="ri-user-3-line"></i> ${article.author}</span>
+          <span><i class="ri-eye-line"></i> ${article.views}</span>
+        </div>
+      </div>`;
+    card.addEventListener('click', () => showArticleDetail(article.id));
+    grid.appendChild(card);
+  });
+}
+
+function renderDeepRead() {
+  const wrap = $('deepReadWrap');
+  if (!wrap) return;
+  const article = ARTICLES.find(a => a.deepRead);
+  if (!article) { wrap.innerHTML = ''; return; }
+  const categories = article.tags.slice(0, 3).map(t => t.toUpperCase()).join(' <span>·</span> ');
+  wrap.innerHTML = `
+    <div class="deep-read-card" data-id="${article.id}">
+      <div class="deep-read-cover">
+        <div class="deep-read-cover-gradient" style="background:${makeCoverGradient(article.coverColors, 160)}"></div>
+        <div class="deep-read-cover-overlay">
+          <div class="deep-read-eyebrow">${categories}</div>
+          <div class="deep-read-title">${article.title}</div>
+        </div>
+      </div>
+      <div class="deep-read-body">
+        <div class="deep-read-excerpt">${article.excerpt}</div>
+        <div class="deep-read-footer">
+          <div class="deep-read-author">
+            <div class="deep-read-author-dot">${article.author[0]}</div>
+            <span>${article.author}</span>
+            <span>·</span>
+            <span>${article.date}</span>
+          </div>
+          <div class="deep-read-stats">
+            <span class="deep-read-stat"><i class="ri-eye-line"></i> ${article.views}</span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  wrap.querySelector('.deep-read-card').addEventListener('click', () => showArticleDetail(article.id));
+}
+
+function renderHotRankings(containerId, limit) {
+  const el = $(containerId);
+  if (!el) return;
+  el.innerHTML = '';
+  const sorted = [...ARTICLES].sort((a, b) => b.views - a.views).slice(0, limit || 5);
+  sorted.forEach((article, i) => {
+    const item = document.createElement('div');
+    item.className = 'hot-item';
+    item.innerHTML = `
+      <div class="hot-rank ${i < 3 ? 'top3' : ''}">${i + 1}</div>
+      <div class="hot-title">${article.title}</div>`;
+    item.addEventListener('click', () => showArticleDetail(article.id));
+    el.appendChild(item);
+  });
+}
+
+function renderDashboardArticles() {
+  renderFeaturedArticles();
+  renderDeepRead();
+  renderHotRankings('hotList', 5);
+}
+
+// ── MBTI DISCOVER CARD ─────────────────────────────────────────────────
+const MBTI_DESCS = {
+  INTJ:'建筑师 · 战略思维',INTP:'逻辑学家 · 创新探索',ENTJ:'指挥官 · 领导力',ENTP:'辩论家 · 创意挑战',
+  INFJ:'提倡者 · 深度洞察',INFP:'调停者 · 理想主义',ENFJ:'主人公 · 感召力',ENFP:'竞选者 · 热情创造',
+  ISTJ:'物流师 · 可靠执行',ISFJ:'守护者 · 默默奉献',ESTJ:'总经理 · 秩序管理',ESFJ:'执政官 · 社交关怀',
+  ISTP:'鉴赏家 · 灵活应变',ISFP:'探险家 · 审美感知',ESTP:'企业家 · 行动派',ESFP:'表演者 · 活力感染',
+};
+const MBTI_GROUPS = [
+  {label:'分析家',types:['INTJ','INTP','ENTJ','ENTP'],group:'analysts'},
+  {label:'外交家',types:['INFJ','INFP','ENFJ','ENFP'],group:'diplomats'},
+  {label:'守护者',types:['ISTJ','ISFJ','ESTJ','ESFJ'],group:'sentinels'},
+  {label:'探险家',types:['ISTP','ISFP','ESTP','ESFP'],group:'explorers'},
+];
+function renderMbtiDiscover() {
+  const el = $('mbtiDiscover');
+  if (!el) return;
+  const group = MBTI_GROUPS.find(g => g.types.includes(currentMbti)) || MBTI_GROUPS[1];
+  const color = MBTI_COLORS[group.group];
+  el.innerHTML = `
+    <div class="mbti-discover-top">
+      <div class="mbti-discover-icon" style="background:${color}33;border:1.5px solid ${color};">${currentMbti.slice(0,2)}</div>
+      <div class="mbti-discover-info">
+        <div class="mbti-discover-type" style="color:${color}">${currentMbti}</div>
+        <div class="mbti-discover-desc">${MBTI_DESCS[currentMbti] || ''}</div>
+      </div>
+    </div>
+    <div class="mbti-discover-grid">
+      ${MBTI_GROUPS.flatMap(g => g.types.map(t => `<div class="mbti-discover-opt${t===currentMbti?' active':''}" data-type="${t}" data-group="${g.group}" style="${t===currentMbti?`background:${color}33;color:${color}`:''}">${t}</div>`)).join('')}
+    </div>`;
+  el.querySelectorAll('.mbti-discover-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      currentMbti = opt.dataset.type;
+      save('fp3_mbti', currentMbti);
+      applyMbti(currentMbti);
+      renderMbtiDiscover();
+      eggBurst(opt.getBoundingClientRect().left+16, opt.getBoundingClientRect().top+10, MBTI_COLORS[opt.dataset.group], 6);
+      showToast(`已切换到 ${currentMbti} 模式`);
+    });
+  });
+}
+
+// ── ARTICLES PAGE ───────────────────────────────────────────────────────
+function renderCategoryNav() {
+  const nav = $('catNav');
+  if (!nav) return;
+  nav.innerHTML = '';
+  CATEGORIES.forEach(cat => {
+    const chip = document.createElement('button');
+    chip.className = 'cat-chip' + (currentCategory === cat.id ? ' active' : '');
+    chip.innerHTML = `<i class="fa-solid ${cat.icon}"></i> ${cat.label}`;
+    chip.addEventListener('click', () => {
+      currentCategory = cat.id;
+      save('fp3_cat', currentCategory);
+      articlesPage = 1;
+      renderArticlesPage();
+    });
+    nav.appendChild(chip);
+  });
+}
+
+function getFilteredArticles() {
+  if (currentCategory === 'all') return ARTICLES;
+  return ARTICLES.filter(a => a.category === currentCategory);
+}
+
+function renderArticlesGrid() {
+  const grid = $('articlesGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  const filtered = getFilteredArticles();
+  const displayed = filtered.slice(0, articlesPage * ARTICLES_PER_PAGE);
+  displayed.forEach(article => {
+    const card = document.createElement('div');
+    card.className = 'article-card';
+    card.innerHTML = `
+      ${makeCoverHTML(article)}
+      <div class="article-card-body">
+        <div class="article-card-title">${article.title}</div>
+        <div class="article-card-excerpt">${article.excerpt}</div>
+        <div class="article-card-footer">
+          <div class="article-card-author">
+            <i class="ri-user-3-line"></i> ${article.author} · ${article.date}
+          </div>
+          <div class="article-card-views"><i class="ri-eye-line"></i> ${article.views}</div>
+        </div>
+      </div>`;
+    card.addEventListener('click', () => showArticleDetail(article.id));
+    grid.appendChild(card);
+  });
+  // load more button
+  const loadMoreBtn = $('loadMoreBtn');
+  if (loadMoreBtn) {
+    loadMoreBtn.style.display = displayed.length < filtered.length ? '' : 'none';
+  }
+}
+
+function renderTagCloud() {
+  const cloud = $('tagCloud');
+  if (!cloud) return;
+  cloud.innerHTML = '';
+  const allTags = [...new Set(ARTICLES.flatMap(a => a.tags))];
+  allTags.forEach(tag => {
+    const pill = document.createElement('span');
+    pill.className = 'tag-pill';
+    pill.textContent = tag;
+    cloud.appendChild(pill);
+  });
+}
+
+function renderTrendList() {
+  const list = $('trendList');
+  if (!list) return;
+  list.innerHTML = '';
+  const trends = [
+    { icon: 'ri-fire-fill', label: 'ENFP 认知功能', delta: '+42%' },
+    { icon: 'ri-fire-fill', label: 'MBTI 团队协作', delta: '+28%' },
+    { icon: 'ri-fire-fill', label: '创意工作者时间管理', delta: '+19%' },
+    { icon: 'ri-fire-fill', label: 'INTJ × ENFP 关系', delta: '+15%' },
+  ];
+  trends.forEach(t => {
+    const item = document.createElement('div');
+    item.className = 'trend-item';
+    item.innerHTML = `<i class="trend-icon ${t.icon}"></i><span class="trend-label">${t.label}</span><span class="trend-delta">${t.delta}</span>`;
+    list.appendChild(item);
+  });
+}
+
+function renderArticlesPage() {
+  renderMbtiDiscover();
+  renderCategoryNav();
+  renderArticlesGrid();
+  renderHotRankings('sidebarHotList', 5);
+  renderTagCloud();
+  renderTrendList();
+}
+
+// ── ARTICLE DETAIL ──────────────────────────────────────────────────────
+function showArticleDetail(id) {
+  const article = ARTICLES.find(a => a.id === id);
+  if (!article) return;
+
+  const content = $('articleDetailContent');
+  if (!content) return;
+
+  const categories = article.tags.slice(0, 3).map(t => t.toUpperCase()).join(' <span>·</span> ');
+
+  content.innerHTML = `
+    <div class="detail-header">
+      <div class="detail-cover">
+        <div class="detail-cover-gradient" style="background:${makeCoverGradient(article.coverColors, 160)}"></div>
+        <div class="detail-cover-overlay">
+          <button class="detail-back" id="detailBackBtn"><i class="ri-arrow-left-line"></i> 返回</button>
+          <div class="detail-eyebrow">${categories}</div>
+          <div class="detail-title">${article.title}</div>
+          <div class="detail-meta">
+            <span class="detail-meta-item"><i class="ri-user-3-line"></i> ${article.author}</span>
+            <span class="detail-meta-item"><i class="ri-calendar-line"></i> ${article.date}</span>
+            <span class="detail-meta-item"><i class="ri-eye-line"></i> ${article.views} 阅读</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="detail-body">${article.body}</div>
+    <div class="detail-related">
+      <div class="detail-related-title"><i class="ri-links-line"></i> 相关推荐</div>
+      <div class="detail-related-grid" id="detailRelatedGrid"></div>
+    </div>`;
+
+  // render related articles
+  const relatedGrid = $('detailRelatedGrid');
+  const related = ARTICLES.filter(a => a.id !== id && a.category === article.category).slice(0, 3);
+  related.forEach(rel => {
+    const card = document.createElement('div');
+    card.className = 'article-card-sm';
+    card.innerHTML = `
+      ${makeCoverHTML(rel)}
+      <div class="article-card-body">
+        <div class="article-card-title">${rel.title}</div>
+        <div class="article-card-meta">
+          <span><i class="ri-eye-line"></i> ${rel.views}</span>
+        </div>
+      </div>`;
+    card.addEventListener('click', () => showArticleDetail(rel.id));
+    relatedGrid.appendChild(card);
+  });
+
+  // back button
+  $('detailBackBtn').addEventListener('click', () => showPage('articles'));
+
+  // render hot list in detail sidebar
+  renderHotRankings('detailHotList', 5);
+
+  showPage('article-detail');
+}
+
+// ── LOAD MORE ───────────────────────────────────────────────────────────
+const loadMoreBtn = $('loadMoreBtn');
+if (loadMoreBtn) {
+  loadMoreBtn.addEventListener('click', () => {
+    articlesPage++;
+    renderArticlesGrid();
+  });
+}
+
+// ── INITIAL ARTICLE RENDER ──────────────────────────────────────────────
+renderDashboardArticles();
 </script>
 </body>
 </html>
