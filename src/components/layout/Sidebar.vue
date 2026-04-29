@@ -1,15 +1,16 @@
 <script setup>
-// Sidebar component - right panel with 360px width
-// Placeholder content for now
+import SyncStatus from '@/components/common/SyncStatus.vue'
+import SparkLine from '@/components/common/SparkLine.vue'
+import QuadrantTodo from '@/components/todo/QuadrantTodo.vue'
 </script>
 
 <template>
   <aside class="sidebar">
     <div class="sidebar-content">
-      <div class="sidebar-placeholder">
-        <i class="fa-solid fa-grip-lines"></i>
-        <span>Sidebar</span>
-      </div>
+      <SparkLine />
+      <SyncStatus />
+      <div class="section-label">四象限待办</div>
+      <QuadrantTodo />
     </div>
   </aside>
 </template>
@@ -26,20 +27,15 @@
 
 .sidebar-content {
   padding: 16px;
-}
-
-.sidebar-placeholder {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   gap: 12px;
-  padding: 40px 20px;
-  color: var(--t3);
-  font-size: 14px;
 }
 
-.sidebar-placeholder i {
-  font-size: 24px;
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--t3);
+  margin-top: 4px;
 }
 </style>
