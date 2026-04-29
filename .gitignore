@@ -1,8 +1,8 @@
 .worktrees/
-/node_modules/
-/dist/
 /.claude/
 /.playwright-mcp/
 /.vscode/
 /.worktrees/
 .idea/
+/vue/dist/
+/vue/node_modules/
