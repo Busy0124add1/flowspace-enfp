@@ -1,0 +1,46 @@
+/* CSS 变量定义：基础色 + MBTI 主题覆盖 */
+:root {
+  /* 基础色（不随 MBTI 变化） */
+  --bg: #0c0d10;
+  --surf: #13141a;
+  --card: #191b23;
+  --line: #252730;
+
+  /* 文字色 */
+  --t1: #eeeef2;
+  --t2: #8a8b99;
+  --t3: #4a4b58;
+
+  /* MBTI 辅色池（dashboard.html 继承） */
+  --pink: #f0537a;
+  --cyan: #3ecfcf;
+  --lime: #9de84b;
+  --violet: #9b6dff;
+  --amber: #f5a623;
+
+  /* 圆角 */
+  --r: 8px;
+  --r2: 12px;
+
+  /* MBTI 主题（applyTheme 会动态覆盖这两个） */
+  --accent: var(--pink);
+  --group-color: var(--cyan);
+}
+
+/* MBTI 类型的默认静态覆盖（以防 JS 未运行时 SSR/首屏） */
+[data-mbti="ENFP"] { --accent: #f0537a; --group-color: #3ecfcf; }
+[data-mbti="INTJ"] { --accent: #9b6dff; --group-color: #9b6dff; }
+[data-mbti="INTP"] { --accent: #9b6dff; --group-color: #9b6dff; }
+[data-mbti="ENTJ"] { --accent: #9b6dff; --group-color: #9b6dff; }
+[data-mbti="ENTP"] { --accent: #9b6dff; --group-color: #9b6dff; }
+[data-mbti="INFJ"] { --accent: #3ecfcf; --group-color: #3ecfcf; }
+[data-mbti="INFP"] { --accent: #3ecfcf; --group-color: #3ecfcf; }
+[data-mbti="ENFJ"] { --accent: #3ecfcf; --group-color: #3ecfcf; }
+[data-mbti="ISTJ"] { --accent: #4ade80; --group-color: #4ade80; }
+[data-mbti="ISFJ"] { --accent: #4ade80; --group-color: #4ade80; }
+[data-mbti="ESTJ"] { --accent: #4ade80; --group-color: #4ade80; }
+[data-mbti="ESFJ"] { --accent: #4ade80; --group-color: #4ade80; }
+[data-mbti="ISTP"] { --accent: #f5a623; --group-color: #f5a623; }
+[data-mbti="ISFP"] { --accent: #f5a623; --group-color: #f5a623; }
+[data-mbti="ESTP"] { --accent: #f5a623; --group-color: #f5a623; }
+[data-mbti="ESFP"] { --accent: #f5a623; --group-color: #f5a623; }

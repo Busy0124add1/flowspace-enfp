@@ -1,0 +1,37 @@
+/* Reset + 字体 + 工具 class */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, #app {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--t1);
+}
+
+body {
+  font-family: "Outfit", system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button { font-family: inherit; cursor: pointer; }
+input, textarea, select { font-family: inherit; }
+a { color: var(--accent); text-decoration: none; }
+
+/* 工具 class */
+.text-t1 { color: var(--t1); }
+.text-t2 { color: var(--t2); }
+.text-t3 { color: var(--t3); }
+.text-accent { color: var(--accent); }
+.flex-row { display: flex; flex-direction: row; }
+.flex-col { display: flex; flex-direction: column; }
+.flex-gap-4 { gap: 4px; }
+.flex-gap-8 { gap: 8px; }
+.flex-gap-12 { gap: 12px; }
+
+/* 滚动条 */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--t3); }
