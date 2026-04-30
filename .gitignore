@@ -6,3 +6,6 @@
 .idea/
 /vue/dist/
 /vue/node_modules/
+node_modules/
+dist/
+*.local
