@@ -1,0 +1,48 @@
+{
+  "energy": { "mood": 72, "focus": 58, "creative": 85 },
+  "journal": "",
+  "threads": [
+    { "id": "t1", "name": "产品原型", "desc": "v2 迭代", "color": "#f0537a", "pct": 40, "steps": [
+      { "text": "需求分析", "done": true },
+      { "text": "线框图", "done": true },
+      { "text": "视觉稿", "done": false },
+      { "text": "交互稿", "done": false },
+      { "text": "交付开发", "done": false }
+    ]},
+    { "id": "t2", "name": "读书笔记", "desc": "《深度工作》", "color": "#3ecfcf", "pct": 60, "steps": [
+      { "text": "第一章", "done": true },
+      { "text": "第二章", "done": true },
+      { "text": "第三章", "done": true },
+      { "text": "复盘整理", "done": false },
+      { "text": "输出文章", "done": false }
+    ]},
+    { "id": "t3", "name": "健身计划", "desc": "每周 3 次", "color": "#9de84b", "pct": 20, "steps": [
+      { "text": "周一力量", "done": true },
+      { "text": "周三有氧", "done": false },
+      { "text": "周五拉伸", "done": false },
+      { "text": "周日复盘", "done": false },
+      { "text": "月度目标", "done": false }
+    ]}
+  ],
+  "projects": [
+    { "id": "p1", "name": "FlowSpace v2", "stage": 1, "stages": ["需求分析", "线框图", "视觉稿", "原型", "交付"] }
+  ],
+  "todos": [
+    { "id": "td1", "text": "修复 tooltip bug", "x": 28, "y": 22, "q": "ui", "done": false },
+    { "id": "td2", "text": "读新书第一章", "x": 72, "y": 28, "q": "si", "done": false },
+    { "id": "td3", "text": "回老板邮件", "x": 22, "y": 72, "q": "un", "done": false }
+  ],
+  "notes": "",
+  "sync": [
+    { "id": "s1", "name": "Obsidian", "status": "ok", "lastSync": 1714464000000 },
+    { "id": "s2", "name": "GitHub", "status": "ok", "lastSync": 1714460000000 },
+    { "id": "s3", "name": "iCloud", "status": "pending", "lastSync": 1714450000000 }
+  ],
+  "streak": { "days": 3, "lastDate": "2026-04-29" },
+  "inbox_items": [
+    { "id": "seed-i1", "content": "试一下番茄钟做副业产品——刷到一个说 ENFP 专注力差的短视频", "url": "https://v.douyin.com/seed1", "status": "pending", "tags": ["副业", "专注"], "source": "douyin", "createdAt": 1714460000000, "updatedAt": 1714460000000 },
+    { "id": "seed-i2", "content": "看到一个观点：每天写 500 字公开输出，3 个月涨粉 1000", "url": "https://zhuanlan.zhihu.com/p/seed2", "status": "verifying", "tags": ["写作"], "source": "zhihu", "createdAt": 1714380000000, "updatedAt": 1714463000000 },
+    { "id": "seed-i3", "content": "用 Obsidian + Dataview 做每日复盘——试过了好用", "url": "", "status": "done", "tags": ["效率", "工具"], "source": "other", "review": "确实好用，已成习惯。每天 10 分钟。", "createdAt": 1713980000000, "updatedAt": 1714100000000 },
+    { "id": "seed-i4", "content": "小红书上看到的早起方法：闹钟放远处。试过，没用。", "url": "https://xhslink.com/seed4", "status": "archived", "tags": ["睡眠"], "source": "xhs", "review": "对我无效，已放弃。", "createdAt": 1713800000000, "updatedAt": 1714200000000 }
+  ]
+}
