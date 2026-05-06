@@ -45,10 +45,26 @@
           v-for="t in activeTodos"
           :key="t.id"
           class="q-dot"
-          :class="{ done: t.done, 'dragging-dot': draggingId === t.id }"
+          :class="{ done: t.done, 'dragging-dot': draggingId === t.id, hover: activeTooltipId === t.id }"
           :style="{ left: `${t.x}%`, top: `${t.y}%`, background: dotColor(t) }"
           @mousedown="onDotDown($event, t)"
+          @mouseenter="showTooltip(t)"
+          @mouseleave="scheduleHide"
         />
+
+        <div
+          v-if="activeTooltipId"
+          class="q-tooltip"
+          :style="{ left: `${tooltipPos.x}%`, top: `${tooltipPos.y}%` }"
+          @mouseenter="cancelHide"
+          @mouseleave="scheduleHide"
+        >
+          <div class="q-tooltip-text">{{ tooltipTodo?.text }}</div>
+          <div class="q-tooltip-actions">
+            <button class="q-tip-btn done-btn" @click="doneFromTooltip($event)">完成</button>
+            <button class="q-tip-btn del-btn" @click="removeFromTooltip">删除</button>
+          </div>
+        </div>
 
         <div class="q-done-panel">
           <div class="q-done-label">已完成</div>
@@ -149,7 +165,42 @@ function classifyQuadrant(x, y) {
 onBeforeUnmount(() => {
   window.removeEventListener('mousemove', onDotMove)
   window.removeEventListener('mouseup', onDotUp)
+  clearTimeout(hideTimer)
 })
+
+// ---- tooltip 状态机（v2-7 延迟隐藏） ----
+const activeTooltipId = ref(null)
+const tooltipPos = ref({ x: 0, y: 0 })
+const tooltipTodo = computed(() => ws.todos.find((t) => t.id === activeTooltipId.value))
+let hideTimer = null
+
+function showTooltip(t) {
+  cancelHide()
+  activeTooltipId.value = t.id
+  tooltipPos.value = { x: t.x, y: t.y }
+}
+function scheduleHide() {
+  clearTimeout(hideTimer)
+  hideTimer = setTimeout(() => {
+    activeTooltipId.value = null
+  }, 300)
+}
+function cancelHide() {
+  clearTimeout(hideTimer)
+}
+function doneFromTooltip(event) {
+  const t = tooltipTodo.value
+  if (!t) return
+  ws.upsertTodo({ ...t, done: true })
+  emit('todo-done', { el: event.currentTarget, origin: { x: event.clientX, y: event.clientY } })
+  activeTooltipId.value = null
+}
+function removeFromTooltip() {
+  const t = tooltipTodo.value
+  if (!t) return
+  ws.removeTodo(t.id)
+  activeTooltipId.value = null
+}
 
 // ---- 完成 action（tooltip 里调用，Task 19 补 tooltip；这里先暴露 markDone 便于测试）----
 function markDone(t, event) {
@@ -428,5 +479,62 @@ defineExpose({ markDone })
   color: var(--t3);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+/* ==== v2-7 tooltip ==== */
+.q-tooltip {
+  position: absolute;
+  background: #1e1f28;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 11px;
+  color: var(--t1);
+  pointer-events: auto;
+  z-index: 50;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  transform: translate(-50%, -130%);
+  max-width: 160px;
+  white-space: normal;
+  line-height: 1.4;
+}
+.q-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: #1e1f28;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  clip-path: polygon(0 0, 100% 100%, 0 100%);
+}
+.q-tooltip-actions {
+  display: flex;
+  gap: 5px;
+  margin-top: 6px;
+}
+.q-tip-btn {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.15s;
+}
+.q-tip-btn:hover { opacity: 0.8; }
+.q-tip-btn.done-btn {
+  background: #4ade8022;
+  color: #4ade80;
+  border: 1px solid #4ade8044;
+}
+.q-tip-btn.del-btn {
+  background: #f0537a22;
+  color: #f0537a;
+  border: 1px solid #f0537a44;
 }
 </style>
