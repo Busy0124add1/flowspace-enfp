@@ -18,6 +18,15 @@
             <i class="fa-solid fa-times" />
           </button>
         </div>
+        <MultiSelect
+          :model-value="inbox.filterTags"
+          :options="tagOptions"
+          placeholder="标签"
+          display="chip"
+          class="ic-tag-filter"
+          :pt="{ root: 'ic-tag-filter-root', panel: 'ic-tag-filter-panel' }"
+          @update:model-value="(v) => inbox.filterTags = v"
+        />
         <button class="ic-new" @click="triggerCapture">
           <i class="fa-solid fa-plus" />
           <span>新灵感</span>
@@ -45,10 +54,13 @@
 import { computed, ref } from 'vue'
 import { useInbox } from '@/stores/useInbox'
 import InboxColumn from './InboxColumn.vue'
+import MultiSelect from 'primevue/multiselect'
 
 const inbox = useInbox()
 
 const STATUSES = ['pending', 'verifying', 'done', 'archived']
+
+const tagOptions = computed(() => inbox.allTags)
 
 const localSearch = ref(inbox.search)
 let searchTimer = null
@@ -172,4 +184,38 @@ function triggerCapture() {
   padding: 2px;
 }
 .ic-search-clear:hover { color: var(--t1); }
+
+.ic-tag-filter { min-width: 140px; }
+</style>
+
+<style>
+.ic-tag-filter-root {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--t1);
+  display: inline-flex;
+  align-items: center;
+}
+.ic-tag-filter-panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 4px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.ic-tag-filter-panel [data-pc-section="header"] { padding: 6px; }
+.ic-tag-filter-panel [data-pc-section="option"] {
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--t1);
+  border-radius: 4px;
+}
+.ic-tag-filter-panel [data-pc-section="option"]:hover {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
 </style>
