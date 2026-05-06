@@ -19,6 +19,7 @@ import { useMbti } from '@/stores/useMbti'
 import { useWorkspace } from '@/stores/useWorkspace'
 import { useInbox } from '@/stores/useInbox'
 import { useHotkey } from '@/composables/useHotkey'
+import { load, save } from '@/services/storage'
 
 const mbti = useMbti()
 const ws = useWorkspace()
@@ -29,9 +30,12 @@ onMounted(async () => {
   mbti.init()
   await ws.hydrate()
   inbox.hydrate()
-  if (inbox.items.length === 0 && ws.inbox_items?.length > 0) {
-    inbox.items = [...ws.inbox_items]
-    inbox.persist()
+  if (!load('inbox_seeded', false) && ws.inbox_items?.length > 0) {
+    if (inbox.items.length === 0) {
+      inbox.items = [...ws.inbox_items]
+      inbox.persist()
+    }
+    save('inbox_seeded', true)
   }
 })
 

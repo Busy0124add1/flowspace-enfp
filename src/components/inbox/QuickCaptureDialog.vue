@@ -181,7 +181,6 @@ function save() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 4px;
   border-top: 1px solid var(--line);
   padding-top: 12px;
 }
