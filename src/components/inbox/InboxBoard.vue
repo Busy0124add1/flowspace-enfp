@@ -7,6 +7,17 @@
       </div>
       <div class="ic-toolbar-right">
         <!-- Task 30-33 会在这里插入搜索 / 过滤 / 排序 / 批量 / 新建 -->
+        <div class="ic-search">
+          <i class="fa-solid fa-search" />
+          <input
+            v-model="localSearch"
+            placeholder="搜索内容、链接、标签……"
+            @input="onSearchInput"
+          />
+          <button v-if="localSearch" class="ic-search-clear" @click="clearSearch">
+            <i class="fa-solid fa-times" />
+          </button>
+        </div>
         <button class="ic-new" @click="triggerCapture">
           <i class="fa-solid fa-plus" />
           <span>新灵感</span>
@@ -31,13 +42,26 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useInbox } from '@/stores/useInbox'
 import InboxColumn from './InboxColumn.vue'
 
 const inbox = useInbox()
 
 const STATUSES = ['pending', 'verifying', 'done', 'archived']
+
+const localSearch = ref(inbox.search)
+let searchTimer = null
+function onSearchInput() {
+  clearTimeout(searchTimer)
+  searchTimer = setTimeout(() => {
+    inbox.search = localSearch.value
+  }, 300)
+}
+function clearSearch() {
+  localSearch.value = ''
+  inbox.search = ''
+}
 
 const grouped = computed(() => {
   const map = { pending: [], verifying: [], done: [], archived: [] }
@@ -117,4 +141,35 @@ function triggerCapture() {
   overflow-y: auto;
   min-height: 0;
 }
+
+.ic-search {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 4px 10px;
+  min-width: 220px;
+}
+.ic-search i { color: var(--t3); font-size: 11px; }
+.ic-search input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--t1);
+  font-size: 12px;
+  padding: 4px 0;
+}
+.ic-search input::placeholder { color: var(--t3); }
+.ic-search-clear {
+  background: none;
+  border: none;
+  color: var(--t3);
+  cursor: pointer;
+  font-size: 10px;
+  padding: 2px;
+}
+.ic-search-clear:hover { color: var(--t1); }
 </style>
