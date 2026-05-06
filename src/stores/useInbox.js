@@ -1,12 +1,6 @@
 import { defineStore } from 'pinia'
 import { load, save } from '@/services/storage'
-
-const URL_RE = /(https?:\/\/\S+)/
-
-function extractUrl(text) {
-  const m = text.match(URL_RE)
-  return m ? m[1].replace(/[，。、；！？)）】」]+$/, '') : null
-}
+import { extractFirstUrl, guessSource } from '@/utils/urlDetect'
 
 function genId() {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID()
@@ -75,7 +69,8 @@ export const useInbox = defineStore('inbox', {
       save('inbox_items', this.items)
     },
     addItem({ content, url }) {
-      const finalUrl = url ?? extractUrl(content)
+      const finalUrl = url ?? extractFirstUrl(content)
+      const finalSource = finalUrl ? guessSource(finalUrl) : undefined
       const now = Date.now()
       const it = {
         id: genId(),
@@ -83,7 +78,7 @@ export const useInbox = defineStore('inbox', {
         url: finalUrl || undefined,
         status: 'pending',
         tags: [],
-        source: undefined,
+        source: finalSource,
         review: undefined,
         createdAt: now,
         updatedAt: now,
