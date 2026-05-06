@@ -1,18 +1,22 @@
 <template>
   <div class="dashboard">
-    <!-- 顶部横幅（DailySpark 占位，Task 22 填） -->
+    <!-- 顶部横幅：DailySpark 跨整行 -->
     <div class="banner-slot">
-      <!-- DailySpark 将在 Task 22 插入这里 -->
+      <DailySpark />
     </div>
     <!-- 双列主体 -->
     <div class="two-col">
       <section class="left">
-        <!-- EnergyPanel / JournalPanel / ThreadsPanel / DesignFlowPanel 将在后续 Task 插入 -->
-        <div class="placeholder">左列（工作台模块待填充）</div>
+        <EnergyPanel />
+        <JournalPanel />
+        <ThreadsPanel />
+        <DesignFlowPanel />
       </section>
       <RightSidebar>
-        <!-- QuadrantTodo / FlashNotes / SyncStatus / MascotAvatar 将在后续 Task 插入 -->
-        <div class="placeholder">右列（侧边栏模块待填充）</div>
+        <MascotAvatar />
+        <QuadrantTodo />
+        <FlashNotes />
+        <SyncStatus />
       </RightSidebar>
     </div>
   </div>
@@ -20,6 +24,15 @@
 
 <script setup>
 import RightSidebar from '@/components/layout/RightSidebar.vue'
+import DailySpark from '@/components/workspace/DailySpark.vue'
+import EnergyPanel from '@/components/workspace/EnergyPanel.vue'
+import JournalPanel from '@/components/workspace/JournalPanel.vue'
+import ThreadsPanel from '@/components/workspace/ThreadsPanel.vue'
+import DesignFlowPanel from '@/components/workspace/DesignFlowPanel.vue'
+import MascotAvatar from '@/components/workspace/MascotAvatar.vue'
+import QuadrantTodo from '@/components/workspace/QuadrantTodo.vue'
+import FlashNotes from '@/components/workspace/FlashNotes.vue'
+import SyncStatus from '@/components/workspace/SyncStatus.vue'
 </script>
 
 <style scoped>
@@ -42,13 +55,5 @@ import RightSidebar from '@/components/layout/RightSidebar.vue'
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-.placeholder {
-  color: var(--t3);
-  padding: 40px 16px;
-  text-align: center;
-  font-size: 13px;
-  border: 1px dashed var(--line);
-  border-radius: var(--r2);
 }
 </style>
