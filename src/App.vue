@@ -5,6 +5,7 @@
       <RouterView />
     </main>
     <QuickCaptureDialog v-model:open="captureOpen" />
+    <InboxEditDialog v-model:open="editOpen" :item-id="editingId" @status-change="onEditStatusChange" />
     <Toast position="bottom-right" />
   </div>
 </template>
@@ -15,6 +16,7 @@ import { RouterView } from 'vue-router'
 import Toast from 'primevue/toast'
 import TopBar from '@/components/layout/TopBar.vue'
 import QuickCaptureDialog from '@/components/inbox/QuickCaptureDialog.vue'
+import InboxEditDialog from '@/components/inbox/InboxEditDialog.vue'
 import { useMbti } from '@/stores/useMbti'
 import { useWorkspace } from '@/stores/useWorkspace'
 import { useInbox } from '@/stores/useInbox'
@@ -25,6 +27,8 @@ const mbti = useMbti()
 const ws = useWorkspace()
 const inbox = useInbox()
 const captureOpen = ref(false)
+const editOpen = ref(false)
+const editingId = ref(null)
 
 onMounted(async () => {
   mbti.init()
@@ -44,6 +48,18 @@ useHotkey('mod+k', () => { captureOpen.value = true })
 function onExternalOpen() { captureOpen.value = true }
 onMounted(() => window.addEventListener('fs1:open-capture', onExternalOpen))
 onBeforeUnmount(() => window.removeEventListener('fs1:open-capture', onExternalOpen))
+
+function onExternalEdit(e) {
+  editingId.value = e.detail
+  editOpen.value = true
+}
+onMounted(() => window.addEventListener('fs1:inbox-open', onExternalEdit))
+onBeforeUnmount(() => window.removeEventListener('fs1:inbox-open', onExternalEdit))
+
+function onEditStatusChange(payload) {
+  // P8 将接 useReward.celebrate；此处先空 handler
+  window.dispatchEvent(new CustomEvent('fs1:inbox-status-change', { detail: payload }))
+}
 </script>
 
 <style scoped>
