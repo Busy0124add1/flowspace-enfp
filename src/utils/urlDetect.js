@@ -1,5 +1,7 @@
-const URL_RE = /(https?:\/\/\S+)/
-const TRAIL_PUNCT = /[，。、；！？)）】」]+$/
+// 只匹配 URL 安全字符（ASCII 可见字符，排除中文/空白/常见尾随标点），
+// 避免在 "https://zhihu.com/q/123。非常棒" 这种中文串里把"非常棒"一起吞进来。
+const URL_RE = /(https?:\/\/[A-Za-z0-9\-._~:/?#[\]@!$&'*+,;=%]+)/
+const TRAIL_PUNCT = /[，。、；！？)）】」.,;!?)]+$/
 
 export function extractFirstUrl(text) {
   if (!text || typeof text !== 'string') return null
