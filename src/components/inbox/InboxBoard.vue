@@ -27,6 +27,15 @@
           :pt="{ root: 'ic-tag-filter-root', panel: 'ic-tag-filter-panel' }"
           @update:model-value="(v) => inbox.filterTags = v"
         />
+        <Select
+          :model-value="sortValue"
+          :options="sortOptions"
+          option-label="label"
+          option-value="value"
+          class="ic-sort"
+          :pt="{ root: 'ic-sort-root' }"
+          @update:model-value="onSortChange"
+        />
         <button class="ic-new" @click="triggerCapture">
           <i class="fa-solid fa-plus" />
           <span>新灵感</span>
@@ -55,12 +64,26 @@ import { computed, ref } from 'vue'
 import { useInbox } from '@/stores/useInbox'
 import InboxColumn from './InboxColumn.vue'
 import MultiSelect from 'primevue/multiselect'
+import Select from 'primevue/select'
 
 const inbox = useInbox()
 
 const STATUSES = ['pending', 'verifying', 'done', 'archived']
 
 const tagOptions = computed(() => inbox.allTags)
+
+const sortOptions = [
+  { label: '最新', value: 'createdAt:desc' },
+  { label: '最早', value: 'createdAt:asc' },
+  { label: '最近更新', value: 'updatedAt:desc' },
+  { label: '按来源', value: 'source:asc' },
+]
+const sortValue = computed(() => `${inbox.sortBy}:${inbox.sortOrder}`)
+function onSortChange(v) {
+  const [by, order] = v.split(':')
+  inbox.sortBy = by
+  inbox.sortOrder = order
+}
 
 const localSearch = ref(inbox.search)
 let searchTimer = null
@@ -217,5 +240,14 @@ function triggerCapture() {
 }
 .ic-tag-filter-panel [data-pc-section="option"]:hover {
   background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.ic-sort-root {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--t1);
 }
 </style>
