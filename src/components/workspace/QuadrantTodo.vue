@@ -2,11 +2,15 @@
   <section class="panel">
     <h3 class="panel-title">
       <i class="fa-solid fa-th-large" />
-      四象限待办
+      <span>四象限待办</span>
+      <span class="spacer" />
       <span class="count">{{ activeTodos.length }}</span>
+      <button class="todo-collapse-btn" :class="{ collapsed }" @click="toggleCollapse">
+        <i class="fa-solid fa-chevron-down" />
+      </button>
     </h3>
 
-    <div class="todo-section-body">
+    <div class="todo-section-body" :class="{ collapsed }">
       <div class="todo-add-row">
         <input
           v-model="newText"
@@ -71,12 +75,19 @@
 <script setup>
 import { ref, computed, onBeforeUnmount } from 'vue'
 import { useWorkspace } from '@/stores/useWorkspace'
+import { load, save } from '@/services/storage'
 
 const ws = useWorkspace()
 const matrixRef = ref(null)
 const newText = ref('')
 const newQ = ref('ui')
 const draggingId = ref(null)
+
+const collapsed = ref(load('todo_collapsed', false))
+function toggleCollapse() {
+  collapsed.value = !collapsed.value
+  save('todo_collapsed', collapsed.value)
+}
 
 const activeTodos = computed(() => ws.todos.filter((t) => !t.done))
 const doneTodos = computed(() => ws.todos.filter((t) => t.done))
@@ -166,12 +177,33 @@ defineExpose({ markDone })
   letter-spacing: 0.4px;
 }
 .panel-title i { color: var(--accent); }
+.panel-title .spacer { flex: 1; }
 .count {
-  margin-left: auto;
   font-size: 11px;
   font-weight: 700;
   color: var(--t3);
 }
+.todo-collapse-btn {
+  background: none;
+  border: none;
+  color: var(--t3);
+  cursor: pointer;
+  font-size: 10px;
+  padding: 0;
+  margin-left: 8px;
+  transition: color 0.15s, transform 0.2s;
+  display: flex;
+  align-items: center;
+}
+.todo-collapse-btn:hover { color: var(--t1); }
+.todo-collapse-btn.collapsed { transform: rotate(-90deg); }
+
+.todo-section-body {
+  max-height: 800px;
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.todo-section-body.collapsed { max-height: 0; }
 
 /* ==== todo 控件 ==== */
 .todo-add-row {
