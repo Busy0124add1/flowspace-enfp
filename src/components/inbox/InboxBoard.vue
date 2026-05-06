@@ -44,6 +44,15 @@
       </div>
     </header>
 
+    <div v-if="inbox.selectedIds.length > 0" class="ic-batch-bar">
+      <span class="ic-batch-count">已选 {{ inbox.selectedIds.length }} 条</span>
+      <button class="ic-batch-btn" @click="inbox.selectAllVisible()">全选可见</button>
+      <button class="ic-batch-btn" @click="inbox.clearSelection()">取消</button>
+      <span class="ic-batch-spacer" />
+      <button class="ic-batch-btn done-btn" @click="batchDone">批量完成</button>
+      <button class="ic-batch-btn arc-btn" @click="batchArchive">批量舍弃</button>
+    </div>
+
     <div class="ic-columns">
       <InboxColumn
         v-for="st in STATUSES"
@@ -122,6 +131,14 @@ function onDropItem(id, targetStatus) {
 }
 function triggerCapture() {
   window.dispatchEvent(new CustomEvent('fs1:open-capture'))
+}
+function batchDone() {
+  inbox.batchUpdateStatus([...inbox.selectedIds], 'done')
+  inbox.clearSelection()
+}
+function batchArchive() {
+  inbox.batchUpdateStatus([...inbox.selectedIds], 'archived')
+  inbox.clearSelection()
 }
 </script>
 
@@ -207,6 +224,38 @@ function triggerCapture() {
   padding: 2px;
 }
 .ic-search-clear:hover { color: var(--t1); }
+
+.ic-batch-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--r);
+  margin-bottom: 12px;
+  font-size: 12px;
+}
+.ic-batch-count {
+  color: var(--accent);
+  font-weight: 700;
+}
+.ic-batch-spacer { flex: 1; }
+.ic-batch-btn {
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--t1);
+  padding: 5px 10px;
+  border-radius: var(--r);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.ic-batch-btn:hover { border-color: var(--accent); }
+.ic-batch-btn.done-btn { color: #4ade80; border-color: #4ade8044; }
+.ic-batch-btn.done-btn:hover { background: #4ade8022; }
+.ic-batch-btn.arc-btn { color: var(--t2); }
 
 .ic-tag-filter { min-width: 140px; }
 </style>
